@@ -6,8 +6,9 @@
 
 - Aiogram
 - Redis
-- Motor
-- MongoDB
+- SQLAlchemy
+- SQLite3
+- PostgreSQL
 - i18n
 - Docker and docker compose
 
@@ -27,8 +28,6 @@
   - [Manage mongodb](#manage-mongodb)
 
 ## Getting started
-
----
 
 ### Init project
 
@@ -51,23 +50,39 @@ $ cp .env.ren .env
 
 `TELEGRAM_BOT_TOKEN` - your bot token (required)
 
+`I18N_DOMAIN` - locales file name
+
 ### Redis config
 
 > If you are not using redis, by default used MemoryStorage
 
-`RD_DB` = redis database (number)
+`RD_DB` - your redis database (number)
 
-`RD_HOST` = redis host
+`RD_HOST` - your redis host
 
-`RD_PORT` = redis port
+`RD_PORT` - your redis port
 
-`RD_PASS` = redis password (not required)
+> You can specify RD_URI instead of RD_DB, RD_HOST and RD_PORT
+
+`RD_URI` - connection url to your redis server
 
 ### Database config
 
-> MongoDB URL format<br> > `mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]`
+> DB_URI format<br> > `dialect+driver://username:password@host:port/database`
 
-`MONGODB_URL` - connection url to your mongodb server
+`DB_USER` - your database username
+
+`DB_PASS` - your database password
+
+`DB_NAME` - your database name
+
+`DB_HOST` - your database host
+
+`DB_PORT` - your database port
+
+> You can specify DB_URI instead of DB_USER, DB_PASS, DB_NAME, DB_HOST and DB_PORT
+
+`DB_URI` - connection url to your database server
 
 ### Application start (local)
 
@@ -79,8 +94,6 @@ $ make run
 
 ## Docker
 
----
-
 ### Application start (docker)
 
 > Run only one service:<br> > `$ docker-compose up -d service-name`
@@ -88,7 +101,7 @@ $ make run
 ```bash
 $ docker-compose up -d
 # If you have make you can enter
-$ make docker_run
+$ make rebuild
 ```
 
 ### View app logs
@@ -96,7 +109,7 @@ $ make docker_run
 ```bash
 $ docker-compose logs -f app
 # If you have make you can enter
-$ make docker_logs
+$ make logs
 ```
 
 ### Rebuild app
@@ -104,13 +117,5 @@ $ make docker_logs
 ```bash
 $ docker-compose up -d --build --no-deps --force-recreate
 # If you have make you can enter
-$ make docker_rebuild
-```
-
-### Manage mongodb
-
-```bash
-$ docker-compose exec mongo mongosh
-# If you have make you can enter
-$ make mongosh
+$ make rebuild
 ```
