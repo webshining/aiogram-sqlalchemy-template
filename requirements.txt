@@ -1,0 +1,12 @@
+# App
+aiogram
+Babel
+environs
+loguru
+
+# Database & storage
+redis
+sqlalchemy[asyncio]
+aiosqlite
+asyncpg
+alembic

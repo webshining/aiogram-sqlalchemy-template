@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      DB_NAME: ${DB_NAME:-database}
+      DB_USER: ${DB_USER:-webshining}
+      DB_PASS: ${DB_PASS:-admin}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-5432}
+      RD_DB: ${RD_DB:-5}
+      RD_HOST: ${RD_HOST:-redis}
+      RD_PORT: ${RD_PORT:-6379}
+    entrypoint:
+      - ./bin/entrypoint.sh
+  db:
+    image: postgres:alpine
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: webshining
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+  postgres_data:
