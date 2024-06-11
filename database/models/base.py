@@ -49,10 +49,19 @@ class BaseModel(Base):
         await session.flush()
         session.expunge_all()
         return obj
+    
+    @classmethod
+    async def update(cls, session: AsyncSession, id: int, **kwargs):
+        if obj := await cls.get(session, id):
+            for key, value in kwargs.items():
+                setattr(obj, key, value)
+            await session.flush()
+            session.expunge_all()
+        return obj
 
 
 @asynccontextmanager
-async def get_session() -> AsyncSession:
+async def get_session():
     async with async_session() as session:
         async with session.begin():
             yield session

@@ -7,7 +7,7 @@ from database.models import User, get_session
 from loader import _
 
 
-@router.message(Command('users'), StatusFilter('super_admin'))
+@router.message(Command('users'), StatusFilter(True))
 async def _users(message: Message):
     text, markup = await _get_users_data()
     await message.answer(text, reply_markup=markup)

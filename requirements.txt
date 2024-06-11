@@ -1,11 +1,11 @@
 # App
-aiogram
-Babel
-environs
-loguru
+aiogram==3.7.0
+Babel==2.15.0
+environs==11.0.0
+loguru==0.7.2
 
 # Database & storage
-redis
+redis==5.0.5
 sqlalchemy[asyncio]
 aiosqlite
 asyncpg

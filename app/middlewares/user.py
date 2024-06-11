@@ -13,14 +13,18 @@ class UserMiddleware(BaseMiddleware):
             event: Update,
             data: Dict[str, Any],
     ) -> Any:
+        from_user = None
         if event.message:
             from_user = event.message.from_user
         if event.callback_query:
             from_user = event.callback_query.from_user
         if event.inline_query:
             from_user = event.inline_query.from_user
-        async with get_session() as session:
-            user = await User.get_or_create(session=session, id=from_user.id, name=from_user.full_name,
-                                            username=from_user.username)
-        data['user'] = user
+        if from_user:
+            async with get_session() as session:
+                user = await User.get_or_create(session=session, id=from_user.id, name=from_user.full_name,
+                                                username=from_user.username)
+            if user.status != "banned":
+                data['user'] = user
+                return await handler(event, data)
         return await handler(event, data)

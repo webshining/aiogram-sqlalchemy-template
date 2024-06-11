@@ -1,3 +1,7 @@
+import asyncio
+
+from aiogram.methods import DeleteWebhook
+
 from app.commands import set_default_commands
 from app.handlers import setup_handlers
 from app.middlewares import setup_middlewares
@@ -14,13 +18,14 @@ async def on_shutdown() -> None:
     logger.info("Bot stopped!")
 
 
-def main() -> None:
+async def main() -> None:
     setup_middlewares(dp)
     setup_handlers(dp)
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
-    dp.run_polling(bot)
+    await bot(DeleteWebhook(skip_updates=True))
+    await dp.start_polling(bot)
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
