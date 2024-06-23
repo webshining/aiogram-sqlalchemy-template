@@ -1,8 +1,12 @@
 from contextlib import asynccontextmanager
 
 from sqlalchemy import and_, select
-from sqlalchemy.ext.asyncio import (AsyncAttrs, AsyncSession,
-                                    async_sessionmaker, create_async_engine)
+from sqlalchemy.ext.asyncio import (
+    AsyncAttrs,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from sqlalchemy.orm import DeclarativeBase
 
 from data.config import DB_URI
@@ -49,7 +53,7 @@ class BaseModel(Base):
         await session.flush()
         session.expunge_all()
         return obj
-    
+
     @classmethod
     async def update(cls, session: AsyncSession, id: int, **kwargs):
         if obj := await cls.get(session, id):
