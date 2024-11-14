@@ -1,4 +1,4 @@
-# <p align="center">Aiogram Mongo Template</p>
+# <p align="center">Aiogram SQLAlchemy Template</p>
 
 ### <p align="center"><a href="https://core.telegram.org/bots/api">Telegram Bot</a> template with <a href="https://docs.aiogram.dev/en/dev-3.x/">aiogram</a>, <a href="https://www.sqlalchemy.org/">SQLAlchemy</a> and <a href="https://www.docker.com/">docker</a></p>
 
