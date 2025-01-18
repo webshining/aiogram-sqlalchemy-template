@@ -15,27 +15,26 @@
 ## Navigate
 
 - [Getting started](#getting-started)
-  - [Init project](#init-project)
-  - [Configure environment variables](#configure-environment-variables)
-    - [Bot config](#bot-config)
-    - [Redis config](#redis-config)
-    - [Database config](#database-config)
-  - [Application start (local)](#application-start-local)
+    - [Init project](#init-project)
+    - [Configure environment variables](#configure-environment-variables)
+        - [Bot config](#bot-config)
+        - [Redis config](#redis-config)
+        - [Database config](#database-config)
+    - [Application start (local)](#application-start-local)
 - [Docker](#docker)
-  - [Application start (docker)](#application-start-docker)
-  - [View app logs](#view-app-logs)
-  - [Rebuild app](#rebuild-app)
-  - [Manage mongodb](#manage-mongodb)
+    - [Application start (docker)](#application-start-docker)
+    - [View app logs](#view-app-logs)
+    - [Rebuild app](#rebuild-app)
+    - [Manage mongodb](#manage-mongodb)
 
 ## Getting started
 
 ### Init project
 
 ```bash
-$ git clone -b aiogram3 https://github.com/webshining/aiogram-mongo-template project_name
+$ git clone https://github.com/webshining/aiogram-sqlalchemy-template project_name
 $ cd project_name
 $ pip install -r requirements.txt
-$ poetry install # If you use poetry. Don't forget to select an interpreter
 ```
 
 ### Configure environment variables
@@ -61,6 +60,10 @@ $ cp .env.ren .env
 `RD_HOST` - your redis host
 
 `RD_PORT` - your redis port
+
+`RD_USER` - your redis username
+
+`RD_PASS` - your redis password
 
 > You can specify RD_URI instead of RD_DB, RD_HOST and RD_PORT
 
