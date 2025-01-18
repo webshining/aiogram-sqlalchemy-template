@@ -1,7 +1,6 @@
 from aiogram.types import BotCommand, BotCommandScopeChat
 
 from loader import _, bot, i18n
-
 from .default import get_default_commands
 
 

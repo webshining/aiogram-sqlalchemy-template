@@ -1,12 +1,7 @@
 from contextlib import asynccontextmanager
 
 from sqlalchemy import and_, select
-from sqlalchemy.ext.asyncio import (
-    AsyncAttrs,
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 from data.config import DB_URI
@@ -15,15 +10,19 @@ async_engine = create_async_engine(DB_URI)
 async_session = async_sessionmaker(async_engine, expire_on_commit=False)
 
 
+@asynccontextmanager
+async def get_session():
+    async with async_session() as session:
+        async with session.begin():
+            yield session
+
+
 class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 
 class BaseModel(Base):
     __abstract__ = True
-
-    def to_dict(self):
-        return {c.key: getattr(self, c.key) for c in self.__table__.columns}
 
     @classmethod
     async def get_all(cls, session: AsyncSession):
@@ -63,9 +62,5 @@ class BaseModel(Base):
             session.expunge_all()
         return obj
 
-
-@asynccontextmanager
-async def get_session():
-    async with async_session() as session:
-        async with session.begin():
-            yield session
+    def to_dict(self):
+        return {c.key: getattr(self, c.key) for c in self.__table__.columns}

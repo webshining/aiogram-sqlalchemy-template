@@ -1,26 +1,45 @@
-from aiogram.filters import Command
-from aiogram.types import Message
+import csv
+import io
 
-from app.filters import StatusFilter
-from app.routers import admin_router as router
+from aiogram import html
+from aiogram.filters import Command
+from aiogram.types import BufferedInputFile, Message
+
 from database.models import User, get_session
 from loader import _
+from ..routes import admin_router as router
 
 
-@router.message(Command("users"), StatusFilter(["super_admin"]))
+@router.message(Command('users'))
 async def _users(message: Message):
-    text, markup = await _get_users_data()
-    await message.answer(text, reply_markup=markup)
+    text, file = await _get_users_data()
+    text = _("<b>Users:</b>") + text
+    await message.answer(text)
+    await message.answer_document(BufferedInputFile(file, 'users.csv'))
 
 
 async def _get_users_data():
+    file = io.StringIO()
+
+    writer = csv.writer(file)
+    writer.writerow(list(User.__annotations__.keys()))
     async with get_session() as session:
         users = await User.get_all(session)
-    if not users:
-        return _("Users is empty🫡"), None
-    text = ""
     for user in users:
-        text += f'\n{"--" * 15}'
-        for key, value in user.to_dict().items():
-            text += f"\n|{key}: <b>{value}</b>"
-    return text, None
+        writer.writerow(list(user.to_dict().values()))
+
+    file.seek(0)
+
+    file = io.BytesIO(file.getvalue().encode())
+    file.seek(0)
+
+    return _get_users_text(users), file.getvalue()
+
+
+def _get_users_text(users: list[User]) -> str:
+    text = "\n" + _('No users🫡')
+    if users:
+        text = ''
+        for user in users:
+            text += f'\n|name: <b>{html.quote(str(user.name))}</b>'
+    return text

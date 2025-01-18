@@ -1,9 +1,6 @@
-from aiogram import Dispatcher
+from .admins import middlewares as admins_middlewares
+from .users import middlewares as users_middlewares
 
-from .inter import i18n_middleware
-from .user import UserMiddleware
+middlewares = [users_middlewares, admins_middlewares]
 
-
-def setup_middlewares(dp: Dispatcher) -> None:
-    dp.update.middleware(UserMiddleware())
-    dp.update.middleware(i18n_middleware)
+__all__ = ["middlewares"]
