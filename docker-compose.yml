@@ -1,7 +1,7 @@
 services:
   app:
     build: .
-    restart: always
+    restart: on-failure
     depends_on:
       db:
         condition: service_healthy
@@ -17,6 +17,8 @@ services:
       RD_DB: ${RD_DB:-5}
       RD_HOST: ${RD_HOST:-redis}
       RD_PORT: ${RD_PORT:-6379}
+      RD_PASS: ${RD_PASS:-admin}
+      RD_USER: ${RD_USER:-admin}
     entrypoint:
       - ./bin/entrypoint.sh
     volumes:
@@ -36,10 +38,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   redis:
-    image: redis:alpine
-    command: redis-server --appendonly yes
+    image: redis/redis-stack
+    restart: unless-stopped
     environment:
-      - REDIS_REPLICATION_MODE=master
+      REDIS_ARGS: "--requirepass ${RD_PASS:-admin} --user ${RD_USER:-admin} on >${RD_PASS:-admin} ~* allcommands --user default off nopass nocommands"
     volumes:
       - redis:/data
 

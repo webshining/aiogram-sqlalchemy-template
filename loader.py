@@ -1,5 +1,5 @@
 from aiogram import Bot, Dispatcher
-from aiogram.client.bot import DefaultBotProperties
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.utils.i18n import I18n
 
@@ -11,6 +11,7 @@ bot = Bot(
         parse_mode=ParseMode.HTML, link_preview_is_disabled=True
     ),
 )
+
 if RD_URI:
     from aiogram.fsm.storage.redis import RedisStorage
     from redis.asyncio.client import Redis
