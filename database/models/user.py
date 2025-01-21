@@ -2,7 +2,7 @@ from sqlalchemy import BigInteger, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import BaseModel
+from ..base import BaseModel, execute
 
 
 class User(BaseModel):
@@ -13,21 +13,3 @@ class User(BaseModel):
     username: Mapped[str] = mapped_column(String, nullable=True)
     status: Mapped[str] = mapped_column(String, default="user")
     lang: Mapped[str] = mapped_column(String, default="en")
-
-    @classmethod
-    async def get_or_create(
-            cls,
-            session: AsyncSession,
-            id: int,
-            name: str,
-            username: str = None,
-            lang: str = "en",
-    ):
-        stmt = select(cls).where(cls.id == id)
-        obj = await session.scalar(stmt)
-        if not obj:
-            obj = cls(id=id, name=name, username=username, lang=lang)
-            session.add(obj)
-            await session.flush()
-        session.expunge_all()
-        return obj

@@ -1,23 +1,13 @@
-from aiogram import BaseMiddleware
+from aiogram.dispatcher.event.telegram import TelegramEventObserver
+from aiogram.types import Message, CallbackQuery, InlineQuery
 
-from ..base import BaseMiddlewareABC
+from database.models import User
 
 
-class StatusMiddleware(BaseMiddlewareABC, BaseMiddleware):
-    @classmethod
-    async def handle_message(cls, message, handler, data):
-        return cls.process_user(data)
-
-    @classmethod
-    async def handle_callback_query(cls, call, handler, data):
-        return cls.process_user(data)
-
-    @classmethod
-    async def handle_inline_query(cls, query, handler, data):
-        return cls.process_user(data)
-
-    @classmethod
-    def process_user(cls, data):
-        user = data['user']
+async def status_middleware(event: TelegramEventObserver):
+    @event.middleware()
+    async def process(handler, event: Message | CallbackQuery | InlineQuery, data):
+        user: User = data["user"]
         if user.status != "admin":
-            return user
+            return
+        return await handler(event, data)

@@ -1,13 +1,12 @@
 from aiogram.dispatcher.event.telegram import TelegramEventObserver
 from aiogram.types import Message, CallbackQuery, InlineQuery
 
-from database.models import User
-from loader import i18n
+from database import get_session
 
 
-async def i18n_middleware(event: TelegramEventObserver):
+async def database_middleware(event: TelegramEventObserver):
     @event.middleware()
     async def process(handler, event: Message | CallbackQuery | InlineQuery, data):
-        user: User = data["user"]
-        i18n.ctx_locale.set(user.lang)
-        await handler(event, data)
+        async with get_session() as session:
+            data["session"] = session
+            await handler(event, data)

@@ -1,19 +1,12 @@
 from aiogram.filters.callback_data import CallbackData
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.utils.magic_filter import MagicFilter
 
 from loader import i18n
-from .base import BaseKeyboardABC
+from .base import BaseInlineKeyboard
 
 
-class LangKeyboard(BaseKeyboardABC):
-    @property
-    def filter(self, rule: MagicFilter | None = None):
-        return self.Callback.filter(rule)
-
-    @property
+class LangKeyboard(BaseInlineKeyboard):
     def keyboard(self):
-        builder = InlineKeyboardBuilder()
+        builder = self.builder()
 
         for lang in i18n.available_locales:
             builder.button(text=lang.upper(), callback_data=self._get_data(lang=lang))

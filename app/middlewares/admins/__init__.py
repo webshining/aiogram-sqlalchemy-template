@@ -1,5 +1,5 @@
-from .status import StatusMiddleware
+from .status import status_middleware
 
-middlewares = [StatusMiddleware()]
+middlewares = [status_middleware]
 
 __all__ = ["middlewares"]
