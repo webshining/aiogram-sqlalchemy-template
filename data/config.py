@@ -15,12 +15,11 @@ RD_PORT = env.int("RD_PORT", None)
 RD_USER = env.str("RD_USER", None)
 RD_PASS = env.str("RD_PASS", None)
 
-RD_URI = env.str("RD_URI", None)
-if not RD_URI and RD_DB and RD_PORT and RD_HOST:
-    url = "redis://"
+RD_URI = env.str("RD_URI", default=None)
+if RD_DB and RD_HOST and RD_PORT:
+    RD_URI = f"redis://{RD_HOST}:{RD_PORT}/{RD_DB}"
     if RD_USER and RD_PASS:
-        url += f"{RD_USER}:{RD_PASS}@"
-    url += f"{RD_HOST}:{RD_PORT}/{RD_DB}"
+        RD_URI = f"redis://{RD_USER}:{RD_PASS}@{RD_HOST}:{RD_PORT}/{RD_DB}"
 
 DB_USER = env.str("DB_USER", default=None)
 DB_PASS = env.str("DB_PASS", default=None)
