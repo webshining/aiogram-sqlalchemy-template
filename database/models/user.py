@@ -1,8 +1,7 @@
-from sqlalchemy import BigInteger, String, select
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import BigInteger, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from ..base import BaseModel, execute
+from ..base import BaseModel
 
 
 class User(BaseModel):

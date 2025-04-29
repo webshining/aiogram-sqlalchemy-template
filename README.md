@@ -4,46 +4,46 @@
 
 ## Technologies used:
 
-- Aiogram
-- Redis
-- SQLAlchemy
-- SQLite3
-- PostgreSQL
-- i18n
-- Docker and docker compose
+-   Aiogram
+-   Redis
+-   SQLAlchemy
+-   SQLite3
+-   PostgreSQL
+-   i18n
+-   Docker and docker compose
 
 ## Navigate
 
-- [Getting started](#getting-started)
-    - [Init project](#init-project)
-    - [Configure environment variables](#configure-environment-variables)
-        - [Bot config](#bot-config)
-        - [Redis config](#redis-config)
-        - [Database config](#database-config)
-    - [Application start (local)](#application-start-local)
-- [Docker](#docker)
-    - [Application start (docker)](#application-start-docker)
-    - [View app logs](#view-app-logs)
-    - [Rebuild app](#rebuild-app)
-    - [Manage mongodb](#manage-mongodb)
+-   [Getting started](#getting-started)
+    -   [Init project](#init-project)
+    -   [Configure environment variables](#configure-environment-variables)
+        -   [Bot config](#bot-config)
+        -   [Redis config](#redis-config)
+        -   [Database config](#database-config)
+    -   [Application start (local)](#application-start-local)
+-   [Docker](#docker)
+    -   [Application start (docker)](#application-start-docker)
+    -   [View app logs](#view-app-logs)
+    -   [Rebuild app](#rebuild-app)
+    -   [Manage mongodb](#manage-mongodb)
 
 ## Getting started
 
 ### Init project
 
-```bash
-$ git clone https://github.com/webshining/aiogram-sqlalchemy-template project_name
-$ cd project_name
-$ pip install -r requirements.txt
-```
+\#:/> `git clone https://github.com/webshining/aiogram-sqlalchemy-template project_name`<br>
+\#:/> `cd project_name`<br>
+\#:/project_name> `pip install -r requirements.txt`<br>
+
+> if you have uv
+
+\#:/project_name> `uv sync`
 
 ### Configure environment variables
 
 > Copy variables from .env.ren file to .env
 
-```bash
-$ cp .env.ren .env
-```
+\#:/project_name> `cp .env.ren .env`
 
 ### Bot config
 
@@ -55,23 +55,13 @@ $ cp .env.ren .env
 
 > If you are not using redis, by default used MemoryStorage
 
-`RD_DB` - your redis database (number)
-
-`RD_HOST` - your redis host
-
-`RD_PORT` - your redis port
-
-`RD_USER` - your redis username
-
-`RD_PASS` - your redis password
-
-> You can specify RD_URI instead of RD_DB, RD_HOST and RD_PORT
+> RD_URI format<br>> `redis[s]://[[username][:password]@][host][:port][/db-number]`
 
 `RD_URI` - connection url to your redis server
 
 ### Database config
 
-> DB_URI format<br> > `dialect+driver://username:password@host:port/database`
+> DB_URI format<br>> `dialect+driver://username:password@host:port/database`
 
 `DB_USER` - your database username
 
@@ -89,11 +79,15 @@ $ cp .env.ren .env
 
 ### Application start (local)
 
-```bash
-$ python main.py
-# If you have make you can enter
-$ make run
-```
+\#:/project_name> `python main.py`
+
+> if you have make
+
+\#:/project_name> `make run`
+
+> if you have uv
+
+\#:/project_name> `uv run main.py`
 
 ## Docker
 
@@ -101,24 +95,24 @@ $ make run
 
 > Run only one service:<br>`$ docker-compose up -d service-name`
 
-```bash
-$ docker-compose up -d
-# If you have make you can enter
-$ make rebuild
-```
+\#:/project_name> `docker compose up -d`
+
+> If you have make you can enter
+
+\#:/project_name> `make rebuild`
 
 ### View app logs
 
-```bash
-$ docker-compose logs -f app
-# If you have make you can enter
-$ make logs
-```
+\#:/project_name> `docker-compose logs -f app`
+
+> If you have make you can enter
+
+\#:/project_name> `make logs`
 
 ### Rebuild app
 
-```bash
-$ docker-compose up -d --build --no-deps --force-recreate
-# If you have make you can enter
-$ make rebuild
-```
+\#:/project_name> `docker-compose up -d --build --no-deps --force-recreate`
+
+> If you have make you can enter
+
+\#:/project_name> `make rebuild`
