@@ -3,13 +3,14 @@ import asyncio
 from aiogram import F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery, Message
 
 from app.keyboards import ApplyKeyboard
 from app.states import NotifyState
 from database.models import User
 from loader import _
 from utils import logger
+
 from ..routes import admin_router as router
 
 

@@ -3,7 +3,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.utils.i18n import I18n
 
-from data.config import I18N_DOMAIN, I18N_PATH, TELEGRAM_BOT_TOKEN, RD_URI
+from data.config import I18N_DOMAIN, I18N_PATH, RD_URI, TELEGRAM_BOT_TOKEN
 
 bot = Bot(
     TELEGRAM_BOT_TOKEN,

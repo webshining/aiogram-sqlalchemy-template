@@ -1,50 +1,52 @@
 services:
-  app:
-    build: .
-    restart: on-failure
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
-    environment:
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
-      DB_NAME: ${DB_NAME:-database}
-      DB_USER: ${DB_USER:-webshining}
-      DB_PASS: ${DB_PASS:-admin}
-      DB_HOST: ${DB_HOST:-db}
-      DB_PORT: ${DB_PORT:-5432}
-      RD_DB: ${RD_DB:-5}
-      RD_HOST: ${RD_HOST:-redis}
-      RD_PORT: ${RD_PORT:-6379}
-      RD_PASS: ${RD_PASS:-admin}
-      RD_USER: ${RD_USER:-admin}
-    entrypoint:
-      - ./bin/entrypoint.sh
-    volumes:
-      - ./logs:/app/logs
-  db:
-    image: postgres:alpine
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: database
-      POSTGRES_USER: webshining
-      POSTGRES_PASSWORD: admin
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-  redis:
-    image: redis/redis-stack
-    restart: unless-stopped
-    environment:
-      REDIS_ARGS: "--requirepass ${RD_PASS:-admin} --user ${RD_USER:-admin} on >${RD_PASS:-admin} ~* allcommands --user default off nopass nocommands"
-    volumes:
-      - redis:/data
+    app:
+        build: .
+        restart: on-failure
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_started
+        environment:
+            TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+            DB_NAME: ${DB_NAME:-database}
+            DB_USER: ${DB_USER:-webshining}
+            DB_PASS: ${DB_PASS:-admin}
+            DB_HOST: ${DB_HOST:-db}
+            DB_PORT: ${DB_PORT:-5432}
+            RD_DB: ${RD_DB:-5}
+            RD_HOST: ${RD_HOST:-redis}
+            RD_PORT: ${RD_PORT:-6379}
+            RD_PASS: ${RD_PASS:-admin}
+            RD_USER: ${RD_USER:-admin}
+        entrypoint:
+            - ./bin/entrypoint.sh
+        volumes:
+            - ./logs:/app/logs
+    db:
+        image: postgres:alpine
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: ${DB_NAME:-database}
+            POSTGRES_USER: ${DB_USER:-admin}
+            POSTGRES_PASSWORD: ${DB_PASS:-admin}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+    redis:
+        image: redis/redis-stack
+        restart: unless-stopped
+        environment:
+            REDIS_ARGS: "--requirepass ${REDIS_PASS:-admin} --user ${REDIS_USER} on >${REDIS_PASS:-admin} ~* &* +@all --user default off"
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis:/data
 
 volumes:
-  postgres_data:
-  redis:
+    postgres_data:
+    redis:

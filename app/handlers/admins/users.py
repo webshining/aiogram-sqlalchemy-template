@@ -7,6 +7,7 @@ from aiogram.types import BufferedInputFile, Message
 
 from database.models import User
 from loader import _
+
 from ..routes import admin_router as router
 
 
@@ -22,8 +23,8 @@ async def _get_users_data(session):
     file = io.StringIO()
     writer = csv.writer(file)
     writer.writerow(list(User.__annotations__.keys()))
-    for user in await User.get_all():
-        writer.writerow(list(user.model_dump().values()))
+    for user in await User.get_all(session=session):
+        writer.writerow(list(user.to_dict().values()))
     file.seek(0)
     file = io.BytesIO(file.getvalue().encode())
     file.seek(0)
