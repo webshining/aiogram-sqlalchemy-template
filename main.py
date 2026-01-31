@@ -33,7 +33,7 @@ async def main() -> None:
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    if all([WEBHOOK_URL, WEBHOOK_PATH, WEBHOOK_SERVER_SECRET, WEBHOOK_SERVER_PORT, WEBHOOK_SERVER_HOST]):
+    if all((WEBHOOK_URL, WEBHOOK_PATH, WEBHOOK_SERVER_SECRET, WEBHOOK_SERVER_PORT, WEBHOOK_SERVER_HOST)):
         app = web.Application()
         webhook_request_headers = SimpleRequestHandler(dispatcher=dp, bot=bot, secret_token=WEBHOOK_SERVER_SECRET)
         webhook_request_headers.register(app, path=WEBHOOK_PATH)
