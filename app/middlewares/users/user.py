@@ -1,5 +1,5 @@
 from aiogram.dispatcher.event.telegram import TelegramEventObserver
-from aiogram.types import Message, CallbackQuery, InlineQuery
+from aiogram.types import CallbackQuery, InlineQuery, Message
 
 from database.models import User
 
@@ -18,3 +18,4 @@ async def user_middleware(event: TelegramEventObserver):
             name=from_user.full_name,
             username=from_user.username,
         )
+        await session.commit()
