@@ -7,6 +7,8 @@ env.read_env()
 
 DIR = Path(__file__).absolute().parent.parent
 
+DEV_SERVER = env.bool("DEV_SERVER", default=False)
+
 TELEGRAM_BOT_TOKEN = env.str("TELEGRAM_BOT_TOKEN")
 WEBHOOK_URL = env.str("WEBHOOK_URL", default=None)
 WEBHOOK_PATH = env.str("WEBHOOK_PATH", default=None)

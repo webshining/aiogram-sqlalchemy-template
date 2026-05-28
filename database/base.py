@@ -1,7 +1,13 @@
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 
-from sqlalchemy import and_, select
-from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy import Column, DateTime, and_, select, text
+from sqlalchemy.ext.asyncio import (
+    AsyncAttrs,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from sqlalchemy.orm import DeclarativeBase
 
 from data.config import DB_URI
@@ -18,7 +24,7 @@ async def get_session():
 
 def execute(func):
     async def wrapper(*args, **kwargs):
-        if not "session" in kwargs:
+        if "session" not in kwargs:
             async with get_session() as session:
                 kwargs["session"] = session
                 return await func(*args, **kwargs)
@@ -34,6 +40,21 @@ class Base(AsyncAttrs, DeclarativeBase):
 
 class BaseModel(Base):
     __abstract__ = True
+
+    created_at = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc).replace(tzinfo=None),
+        server_default=text("timezone('utc', now())"),
+        nullable=False,
+    )
+    updated_at = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc).replace(tzinfo=None),
+        onupdate=lambda: datetime.now(timezone.utc).replace(tzinfo=None),
+        server_default=text("timezone('utc', now())"),
+        server_onupdate=text("timezone('utc', now())"),
+        nullable=False,
+    )
 
     @classmethod
     async def get(cls, id: int, session: AsyncSession = None):

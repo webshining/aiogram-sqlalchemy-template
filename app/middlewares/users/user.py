@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from aiogram.dispatcher.event.telegram import TelegramEventObserver
 from aiogram.types import CallbackQuery, InlineQuery, Message
 
@@ -18,4 +20,5 @@ async def user_middleware(event: TelegramEventObserver):
             name=from_user.full_name,
             username=from_user.username,
         )
+        data["user"].updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
         await session.commit()
